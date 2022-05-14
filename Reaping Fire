@@ -1,0 +1,23 @@
+# The goal is to survive for 30 seconds, and keep the mines intact for at least 30 seconds.
+
+def chooseStrategy():
+    enemies = hero.findEnemies()
+    # If you can summon a griffin-rider, return "griffin-rider"
+    if hero.gold >= hero.costOf("griffin-rider"):
+        hero.summon("griffin-rider")
+    # If there is a fangrider on your side of the mines, return "fight-back"
+    friends = hero.findFriends()
+    for friend in friends:
+        enemy = friend.findNearestEnemy()
+        if enemy:
+            hero.command(friend, "attack", enemy)
+    enemy = hero.findNearestEnemy()
+    if enemy and enemy.type == "fangrider" and hero.distanceTo(enemy) < 20:
+        hero.attack(enemy)
+    else:
+        item = hero.findNearestItem()
+        if item:
+            hero.moveXY(item.pos.x, item.pos.y)
+
+while True:
+    chooseStrategy()
